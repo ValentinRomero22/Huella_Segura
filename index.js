@@ -4,20 +4,31 @@ import cors from 'cors'
 
 import { mongoConnect } from './utils/mongoConnect.js'
 
+import {
+    petRouter
+} from './routes/main.routes.js'
+
+import { logWriting } from './utils/logWriting.js'
+
 const app = express()
 app.use(express.json())
 app.use(cors())
 
 const httpServer = createServer(app)
 
+mongoConnect()
+
+app.use('/', petRouter)
+
+app.use(logWriting)
+
 httpServer.listen(8080, () => console.log('Servidor corriendo en el puerto 8080'))
 httpServer.on('error', () => console.log('Error al levantar el servidor'))
 
-mongoConnect()
 
 // ACCESO A LA RUTA DE PRUEBA PARA TESTEAR CON POSTMAN
 
-const testRouter = Router()
+/* const testRouter = Router()
 app.use('/', testRouter)
 
 const testPath = async (req, res) => {
@@ -34,4 +45,4 @@ const testPath = async (req, res) => {
     }
 }
 
-testRouter.post('/test/', testPath)
+testRouter.post('/test/', testPath) */
